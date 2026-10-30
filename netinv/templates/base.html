@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock %} · NetInv</title>
+  <script>
+    // Apply a saved theme override before first paint; otherwise CSS follows the system.
+    try { var t = localStorage.getItem("netinv-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg', v=version) }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=version) }}">
+  <script src="{{ url_for('static', filename='app.js', v=version) }}" defer></script>
+</head>
+{% set ep = request.endpoint or '' %}
+<body class="{% block body_class %}{% endblock %}">
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="{{ url_for('main.nodes') }}">
+        <svg class="logo" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.6" transform="rotate(-90 12 12)"><circle cx="12" cy="12" r="7.2" pathLength="100" stroke-dasharray="16 84" stroke-dashoffset="-2"/><circle cx="12" cy="12" r="7.2" pathLength="100" stroke-dasharray="16 84" stroke-dashoffset="-22"/><circle cx="12" cy="12" r="7.2" pathLength="100" stroke-dasharray="16 84" stroke-dashoffset="-42"/><circle cx="12" cy="12" r="7.2" pathLength="100" stroke-dasharray="16 84" stroke-dashoffset="-62"/><circle cx="12" cy="12" r="7.2" pathLength="100" stroke-dasharray="16 84" stroke-dashoffset="-82" opacity=".4"/></g><circle cx="12" cy="12" r="2.3" fill="currentColor"/></svg>
+        <span>NetInv</span>
+      </a>
+      <nav class="mainnav">
+        <a href="{{ url_for('main.nodes') }}" class="{{ 'active' if ep == 'main.nodes' or ep.startswith('main.node_') }}">Nodes</a>
+        <a href="{{ url_for('main.summary') }}" class="{{ 'active' if ep == 'main.summary' }}">Summary</a>
+        <a href="{{ url_for('main.config') }}" class="{{ 'active' if ep.startswith('main.config') }}">Configuration</a>
+        <a href="{{ url_for('main.report') }}" class="{{ 'active' if ep == 'main.report' }}">Report</a>
+        <a href="{{ url_for('main.history') }}" class="{{ 'active' if ep == 'main.history' }}">History</a>
+        <a href="{{ url_for('main.about') }}" class="{{ 'active' if ep.startswith('main.about') }}">About</a>
+      </nav>
+      {% set admin_lines = admin_info() %}
+      {% if admin_lines %}<div class="admin-info">{% for line in admin_lines %}<div>{{ line }}</div>{% endfor %}</div>{% endif %}
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch light/dark theme" title="Switch light/dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </header>
+  <main class="wrap">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}<div class="flash {{ cat }}" role="status">{{ msg }}</div>{% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <a class="ver" href="{{ url_for('main.about') }}">NetInv v{{ version }}</a>
+      <span>Page loaded {{ now_iso()|ts(seconds=True) }}</span>
+      <span>Rendered in {{ render_ms() }} ms</span>
+      <span>{{ worker_summary() }}</span>
+    </div>
+  </footer>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

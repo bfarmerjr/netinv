@@ -1,0 +1,29 @@
+{% extends "config/base.html" %}
+{% block title %}{{ m.title }} · Configuration{% endblock %}
+{% block config %}
+<p class="muted small">{{ m.hint }} Changes save instantly.</p>
+{% if rows and cols %}
+<div class="card flush matrix-wrap">
+<table class="matrix" data-endpoint="{{ url_for('main.config_matrix', kind=kind) }}">
+  <thead>
+    <tr>
+      <th class="corner">{{ m.row_label }} \ Tag</th>
+      {% for c in cols %}<th class="col"><span>{{ c.name }}</span></th>{% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <th class="rowh">{% if kind == 'node-tags' %}<a href="{{ url_for('main.node_detail', node_id=r.id) }}">{{ r.name }}</a>{% else %}{{ r.name }}{% endif %}</th>
+      {% for c in cols %}
+      <td><input type="checkbox" data-row="{{ r.id }}" data-col="{{ c.id }}" {{ 'checked' if (r.id, c.id) in links }} aria-label="{{ r.name }} – {{ c.name }}"></td>
+      {% endfor %}
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<div class="empty">{{ m.empty }}</div>
+{% endif %}
+{% endblock %}

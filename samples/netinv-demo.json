@@ -1,0 +1,2022 @@
+{
+  "format": "netinv-config",
+  "version": 1,
+  "exported_at": "2026-10-28T17:00:00Z",
+  "admin_info": "**Demo Network Team** \u00b7 netops@example.net\n[Runbook](https://wiki.example.net/netops) \u00b7 on-call `x4242`",
+  "checks": [
+    {
+      "name": "Automatic security updates",
+      "description": "unattended-upgrades or equivalent enabled for security fixes."
+    },
+    {
+      "name": "Backups scheduled",
+      "description": "Nightly backup job exists and last run succeeded."
+    },
+    {
+      "name": "Config backed up",
+      "description": "Running config is exported to the config archive."
+    },
+    {
+      "name": "DB client TLS required",
+      "description": "Database refuses unencrypted client connections."
+    },
+    {
+      "name": "Default credentials changed",
+      "description": "No vendor default accounts or passwords remain."
+    },
+    {
+      "name": "Default-deny policy",
+      "description": "Inbound and inter-zone rules end in an explicit deny."
+    },
+    {
+      "name": "Disk encryption",
+      "description": "Data volumes encrypted at rest."
+    },
+    {
+      "name": "Firmware current",
+      "description": "Running the vendor's current recommended firmware."
+    },
+    {
+      "name": "HA cluster quorum",
+      "description": "Node is a healthy member of the cluster with quorum."
+    },
+    {
+      "name": "HSTS enabled",
+      "description": "Strict-Transport-Security header sent on all HTTPS responses."
+    },
+    {
+      "name": "Isolated IoT VLAN",
+      "description": "Device sits on the IoT VLAN with no route to internal networks."
+    },
+    {
+      "name": "Least-privilege DB accounts",
+      "description": "Applications use per-app accounts without superuser rights."
+    },
+    {
+      "name": "Logs forwarded to SIEM",
+      "description": "System and auth logs are shipped to the central log host."
+    },
+    {
+      "name": "Management on OOB VLAN",
+      "description": "Management interface only reachable from the out-of-band network."
+    },
+    {
+      "name": "Monitoring agent installed",
+      "description": "Node appears in monitoring with CPU, disk and service checks."
+    },
+    {
+      "name": "Restore tested",
+      "description": "A restore was tested within the last 6 months."
+    },
+    {
+      "name": "SSH key-only login",
+      "description": "PasswordAuthentication no; root cannot log in with a password."
+    },
+    {
+      "name": "Time synced (NTP)",
+      "description": "Clock synced to the internal NTP servers."
+    },
+    {
+      "name": "TLS certificate valid",
+      "description": "Public certificate valid for 30+ days and auto-renewing."
+    },
+    {
+      "name": "UPS-protected power",
+      "description": "Device is on a monitored UPS circuit."
+    }
+  ],
+  "tags": [
+    {
+      "name": "backup",
+      "description": "Holds data that must be backed up.",
+      "checks": [
+        "Backups scheduled",
+        "Restore tested"
+      ]
+    },
+    {
+      "name": "database",
+      "description": "Database servers.",
+      "checks": [
+        "DB client TLS required",
+        "Disk encryption",
+        "Least-privilege DB accounts"
+      ]
+    },
+    {
+      "name": "dmz",
+      "description": "Reachable from the internet.",
+      "checks": [
+        "Default-deny policy",
+        "Logs forwarded to SIEM"
+      ]
+    },
+    {
+      "name": "firewall",
+      "description": "Perimeter and internal firewalls.",
+      "checks": [
+        "Config backed up",
+        "Default-deny policy",
+        "Firmware current",
+        "Logs forwarded to SIEM"
+      ]
+    },
+    {
+      "name": "hypervisor",
+      "description": "Virtualization hosts.",
+      "checks": [
+        "HA cluster quorum",
+        "Management on OOB VLAN",
+        "UPS-protected power"
+      ]
+    },
+    {
+      "name": "iot",
+      "description": "Cameras, sensors and other embedded devices.",
+      "checks": [
+        "Default credentials changed",
+        "Firmware current",
+        "Isolated IoT VLAN"
+      ]
+    },
+    {
+      "name": "lab",
+      "description": "Test systems; no checks of their own.",
+      "checks": []
+    },
+    {
+      "name": "linux",
+      "description": "Linux servers and VMs.",
+      "checks": [
+        "Automatic security updates",
+        "Logs forwarded to SIEM",
+        "Monitoring agent installed",
+        "SSH key-only login",
+        "Time synced (NTP)"
+      ]
+    },
+    {
+      "name": "network",
+      "description": "Switches, routers and access points.",
+      "checks": [
+        "Config backed up",
+        "Default credentials changed",
+        "Firmware current",
+        "Management on OOB VLAN",
+        "Time synced (NTP)"
+      ]
+    },
+    {
+      "name": "storage",
+      "description": "NAS and backup targets.",
+      "checks": [
+        "Disk encryption",
+        "Monitoring agent installed",
+        "UPS-protected power"
+      ]
+    },
+    {
+      "name": "web",
+      "description": "Public or internal web servers.",
+      "checks": [
+        "HSTS enabled",
+        "TLS certificate valid"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "access-sw-02",
+      "ip": "192.0.2.11",
+      "fqdn": "access-sw-02.example.net",
+      "url": null,
+      "notes": "Office floor 2.",
+      "created_at": "2026-09-10T09:23:39Z",
+      "updated_at": "2026-10-28T06:55:00Z",
+      "role": "network",
+      "tags": [
+        "network"
+      ],
+      "states": [
+        {
+          "check": "Default credentials changed",
+          "state": "compliant",
+          "changed_at": "2026-10-26T16:24:00Z"
+        },
+        {
+          "check": "Firmware current",
+          "state": "compliant",
+          "changed_at": "2026-10-07T17:15:04Z"
+        },
+        {
+          "check": "Management on OOB VLAN",
+          "state": "pending",
+          "changed_at": "2026-10-25T17:37:16Z"
+        },
+        {
+          "check": "Time synced (NTP)",
+          "state": "pending",
+          "changed_at": "2026-10-28T06:55:00Z"
+        }
+      ]
+    },
+    {
+      "name": "app-02",
+      "ip": "2001:db8:20::80",
+      "fqdn": "app-02.example.net",
+      "url": "https://app-02.example.net/",
+      "notes": "Internal ticketing app.",
+      "created_at": "2026-09-06T03:59:56Z",
+      "updated_at": "2026-10-28T07:00:55Z",
+      "role": "web",
+      "tags": [
+        "backup",
+        "linux",
+        "web"
+      ],
+      "states": [
+        {
+          "check": "Automatic security updates",
+          "state": "compliant",
+          "changed_at": "2026-10-28T07:00:55Z"
+        },
+        {
+          "check": "Backups scheduled",
+          "state": "pending",
+          "changed_at": "2026-10-25T21:57:23Z"
+        },
+        {
+          "check": "HSTS enabled",
+          "state": "na",
+          "changed_at": "2026-09-12T08:53:34Z"
+        },
+        {
+          "check": "Logs forwarded to SIEM",
+          "state": "compliant",
+          "changed_at": "2026-10-28T03:58:53Z"
+        },
+        {
+          "check": "SSH key-only login",
+          "state": "compliant",
+          "changed_at": "2026-10-19T12:03:24Z"
+        },
+        {
+          "check": "Time synced (NTP)",
+          "state": "compliant",
+          "changed_at": "2026-10-21T05:25:01Z"
+        },
+        {
+          "check": "TLS certificate valid",
+          "state": "pending",
+          "changed_at": "2026-10-22T04:25:51Z"
+        }
+      ]
+    },
+    {
+      "name": "cam-front-door",
+      "ip": "192.0.2.150",
+      "fqdn": "cam-front-door.example.net",
+      "url": null,
+      "notes": "PoE camera.",
+      "created_at": "2026-09-06T12:43:33Z",
+      "updated_at": "2026-10-20T00:11:20Z",
+      "role": "iot",
+      "tags": [
+        "iot"
+      ],
+      "states": [
+        {
+          "check": "Default credentials changed",
+          "state": "pending",
+          "changed_at": "2026-10-20T00:11:20Z"
+        }
+      ]
+    },
+    {
+      "name": "core-sw-01",
+      "ip": "192.0.2.10",
+      "fqdn": "core-sw-01.example.net",
+      "url": null,
+      "notes": "48-port core switch, rack A.",
+      "created_at": "2026-09-06T19:45:00Z",
+      "updated_at": "2026-10-19T18:46:33Z",
+      "role": "network",
+      "tags": [
+        "network"
+      ],
+      "states": [
+        {
+          "check": "Config backed up",
+          "state": "compliant",
+          "changed_at": "2026-10-07T15:48:28Z"
+        },
+        {
+          "check": "Default credentials changed",
+          "state": "compliant",
+          "changed_at": "2026-09-12T06:32:51Z"
+        },
+        {
+          "check": "Firmware current",
+          "state": "compliant",
+          "changed_at": "2026-09-25T09:01:52Z"
+        },
+        {
+          "check": "Management on OOB VLAN",
+          "state": "compliant",
+          "changed_at": "2026-10-19T18:46:33Z"
+        },
+        {
+          "check": "Time synced (NTP)",
+          "state": "compliant",
+          "changed_at": "2026-09-25T18:48:06Z"
+        }
+      ]
+    },
+    {
+      "name": "db-01",
+      "ip": "198.51.100.50",
+      "fqdn": "db-01.example.net",
+      "url": null,
+      "notes": "PostgreSQL primary.",
+      "created_at": "2026-09-07T06:53:29Z",
+      "updated_at": "2026-10-17T03:58:31Z",
+      "role": "database",
+      "tags": [
+        "backup",
+        "database",
+        "linux"
+      ],
+      "states": [
+        {
+          "check": "Automatic security updates",
+          "state": "compliant",
+          "changed_at": "2026-10-05T13:05:46Z"
+        },
+        {
+          "check": "Backups scheduled",
+          "state": "compliant",
+          "changed_at": "2026-09-13T07:28:02Z"
+        },
+        {
+          "check": "DB client TLS required",
+          "state": "compliant",
+          "changed_at": "2026-10-13T06:53:49Z"
+        },
+        {
+          "check": "Disk encryption",
+          "state": "compliant",
+          "changed_at": "2026-10-11T18:05:09Z"
+        },
+        {
+          "check": "Least-privilege DB accounts",
+          "state": "compliant",
+          "changed_at": "2026-09-10T06:31:22Z"
+        },
+        {
+          "check": "Monitoring agent installed",
+          "state": "compliant",
+          "changed_at": "2026-10-07T06:35:59Z"
+        },
+        {
+          "check": "Restore tested",
+          "state": "compliant",
+          "changed_at": "2026-10-12T02:43:31Z"
+        },
+        {
+          "check": "SSH key-only login",
+          "state": "compliant",
+          "changed_at": "2026-10-17T03:58:31Z"
+        }
+      ]
+    },
+    {
+      "name": "db-02",
+      "ip": "198.51.100.51",
+      "fqdn": "db-02.example.net",
+      "url": null,
+      "notes": "PostgreSQL replica.",
+      "created_at": "2026-09-10T16:48:19Z",
+      "updated_at": "2026-10-25T00:57:17Z",
+      "role": "database",
+      "tags": [
+        "backup",
+        "database",
+        "linux"
+      ],
+      "states": [
+        {
+          "check": "Backups scheduled",
+          "state": "pending",
+          "changed_at": "2026-10-22T23:13:43Z"
+        },
+        {
+          "check": "DB client TLS required",
+          "state": "compliant",
+          "changed_at": "2026-09-19T15:17:38Z"
+        },
+        {
+          "check": "Disk encryption",
+          "state": "compliant",
+          "changed_at": "2026-09-15T02:26:02Z"
+        },
+        {
+          "check": "Least-privilege DB accounts",
+          "state": "compliant",
+          "changed_at": "2026-10-25T00:57:17Z"
+        },
+        {
+          "check": "Logs forwarded to SIEM",
+          "state": "pending",
+          "changed_at": "2026-09-19T04:24:42Z"
+        },
+        {
+          "check": "Restore tested",
+          "state": "na",
+          "changed_at": "2026-10-20T15:16:34Z"
+        }
+      ]
+    },
+    {
+      "name": "edge-fw-01",
+      "ip": "192.0.2.1",
+      "fqdn": "edge-fw-01.example.net",
+      "url": "https://edge-fw-01.example.net/",
+      "notes": "Primary perimeter firewall. HA pair with edge-fw-02.",
+      "created_at": "2026-09-08T19:56:00Z",
+      "updated_at": "2026-10-16T19:11:14Z",
+      "role": "firewall",
+      "tags": [
+        "dmz",
+        "firewall",
+        "network"
+      ],
+      "states": [
+        {
+          "check": "Config backed up",
+          "state": "compliant",
+          "changed_at": "2026-10-10T15:36:54Z"
+        },
+        {
+          "check": "Default credentials changed",
+          "state": "compliant",
+          "changed_at": "2026-09-15T03:15:48Z"
+        },
+        {
+          "check": "Default-deny policy",
+          "state": "compliant",
+          "changed_at": "2026-09-29T04:29:52Z"
+        },
+        {
+          "check": "Firmware current",
+          "state": "compliant",
+          "changed_at": "2026-10-16T19:11:14Z"
+        },
+        {
+          "check": "Logs forwarded to SIEM",
+          "state": "compliant",
+          "changed_at": "2026-09-29T09:53:34Z"
+        },
+        {
+          "check": "Management on OOB VLAN",
+          "state": "compliant",
+          "changed_at": "2026-10-13T18:34:12Z"
+        },
+        {
+          "check": "Time synced (NTP)",
+          "state": "compliant",
+          "changed_at": "2026-09-28T20:07:25Z"
+        }
+      ]
+    },
+    {
+      "name": "edge-fw-02",
+      "ip": "192.0.2.2",
+      "fqdn": "edge-fw-02.example.net",
+      "url": "https://edge-fw-02.example.net/",
+      "notes": "Standby member of the HA pair.",
+      "created_at": "2026-09-09T09:19:51Z",
+      "updated_at": "2026-10-27T05:48:31Z",
+      "role": "firewall",
+      "tags": [
+        "dmz",
+        "firewall",
+        "network"
+      ],
+      "states": [
+        {
+          "check": "Config backed up",
+          "state": "pending",
+          "changed_at": "2026-10-13T18:05:06Z"
+        },
+        {
+          "check": "Default credentials changed",
+          "state": "compliant",
+          "changed_at": "2026-10-02T13:57:28Z"
+        },
+        {
+          "check": "Firmware current",
+          "state": "compliant",
+          "changed_at": "2026-10-13T08:43:44Z"
+        },
+        {
+          "check": "Logs forwarded to SIEM",
+          "state": "compliant",
+          "changed_at": "2026-09-30T04:04:04Z"
+        },
+        {
+          "check": "Management on OOB VLAN",
+          "state": "compliant",
+          "changed_at": "2026-09-18T16:48:48Z"
+        },
+        {
+          "check": "Time synced (NTP)",
+          "state": "compliant",
+          "changed_at": "2026-10-27T05:48:31Z"
+        }
+      ]
+    },
+    {
+      "name": "env-sensor-rack",
+      "ip": "192.0.2.151",
+      "fqdn": "env-sensor-rack.example.net",
+      "url": null,
+      "notes": "Temperature and humidity in the server rack.",
+      "created_at": "2026-09-07T20:07:32Z",
+      "updated_at": "2026-10-13T14:16:00Z",
+      "role": "iot",
+      "tags": [
+        "iot",
+        "network"
+      ],
+      "states": [
+        {
+          "check": "Config backed up",
+          "state": "na",
+          "changed_at": "2026-10-11T16:01:16Z"
+        },
+        {
+          "check": "Isolated IoT VLAN",
+          "state": "pending",
+          "changed_at": "2026-09-18T19:33:12Z"
+        },
+        {
+          "check": "Management on OOB VLAN",
+          "state": "na",
+          "changed_at": "2026-10-13T14:16:00Z"
+        },
+        {
+          "check": "Time synced (NTP)",
+          "state": "compliant",
+          "changed_at": "2026-10-08T21:08:36Z"
+        }
+      ]
+    },
+    {
+      "name": "lab-box",
+      "ip": "2001:db8:99::5",
+      "fqdn": "lab-box.example.net",
+      "url": null,
+      "notes": "Scratch VM, rebuilt often. No role set on purpose.",
+      "created_at": "2026-09-08T05:22:28Z",
+      "updated_at": "2026-10-20T10:11:30Z",
+      "role": null,
+      "tags": [
+        "lab",
+        "linux"
+      ],
+      "states": [
+        {
+          "check": "Automatic security updates",
+          "state": "pending",
+          "changed_at": "2026-10-20T10:11:30Z"
+        },
+        {
+          "check": "Logs forwarded to SIEM",
+          "state": "pending",
+          "changed_at": "2026-10-17T21:14:34Z"
+        }
+      ]
+    },
+    {
+      "name": "nas-01",
+      "ip": "198.51.100.60",
+      "fqdn": "nas-01.example.net",
+      "url": "https://nas-01.example.net:5001/",
+      "notes": "Backup target for all VMs.",
+      "created_at": "2026-09-10T21:20:44Z",
+      "updated_at": "2026-10-27T22:08:19Z",
+      "role": "storage",
+      "tags": [
+        "backup",
+        "network",
+        "storage"
+      ],
+      "states": [
+        {
+          "check": "Backups scheduled",
+          "state": "compliant",
+          "changed_at": "2026-10-27T02:21:42Z"
+        },
+        {
+          "check": "Default credentials changed",
+          "state": "compliant",
+          "changed_at": "2026-10-22T07:14:47Z"
+        },
+        {
+          "check": "Disk encryption",
+          "state": "compliant",
+          "changed_at": "2026-10-15T22:33:39Z"
+        },
+        {
+          "check": "Management on OOB VLAN",
+          "state": "pending",
+          "changed_at": "2026-10-15T17:43:03Z"
+        },
+        {
+          "check": "Monitoring agent installed",
+          "state": "compliant",
+          "changed_at": "2026-09-21T13:53:40Z"
+        },
+        {
+          "check": "Restore tested",
+          "state": "compliant",
+          "changed_at": "2026-10-17T08:26:33Z"
+        },
+        {
+          "check": "Time synced (NTP)",
+          "state": "compliant",
+          "changed_at": "2026-10-27T22:08:19Z"
+        },
+        {
+          "check": "UPS-protected power",
+          "state": "compliant",
+          "changed_at": "2026-09-25T18:58:44Z"
+        }
+      ]
+    },
+    {
+      "name": "printer-3f",
+      "ip": "192.0.2.200",
+      "fqdn": "printer-3f.example.net",
+      "url": "http://printer-3f.example.net/",
+      "notes": "Not tagged yet, so no checks apply.",
+      "created_at": "2026-09-05T00:14:23Z",
+      "updated_at": "2026-09-05T00:14:23Z",
+      "role": null,
+      "tags": [],
+      "states": []
+    },
+    {
+      "name": "pve-01",
+      "ip": "198.51.100.21",
+      "fqdn": "pve-01.example.net",
+      "url": "https://pve-01.example.net:8006/",
+      "notes": "Cluster node 1 of 3.",
+      "created_at": "2026-09-08T18:35:57Z",
+      "updated_at": "2026-10-24T21:37:44Z",
+      "role": "hypervisor",
+      "tags": [
+        "hypervisor",
+        "linux"
+      ],
+      "states": [
+        {
+          "check": "Automatic security updates",
+          "state": "compliant",
+          "changed_at": "2026-09-28T20:25:10Z"
+        },
+        {
+          "check": "HA cluster quorum",
+          "state": "compliant",
+          "changed_at": "2026-10-05T23:42:17Z"
+        },
+        {
+          "check": "Logs forwarded to SIEM",
+          "state": "compliant",
+          "changed_at": "2026-10-01T00:18:12Z"
+        },
+        {
+          "check": "Management on OOB VLAN",
+          "state": "compliant",
+          "changed_at": "2026-10-24T21:37:44Z"
+        },
+        {
+          "check": "Monitoring agent installed",
+          "state": "compliant",
+          "changed_at": "2026-09-25T01:45:15Z"
+        },
+        {
+          "check": "SSH key-only login",
+          "state": "compliant",
+          "changed_at": "2026-10-14T15:01:20Z"
+        },
+        {
+          "check": "Time synced (NTP)",
+          "state": "compliant",
+          "changed_at": "2026-09-20T16:51:12Z"
+        },
+        {
+          "check": "UPS-protected power",
+          "state": "compliant",
+          "changed_at": "2026-10-10T07:38:35Z"
+        }
+      ]
+    },
+    {
+      "name": "pve-02",
+      "ip": "198.51.100.22",
+      "fqdn": "pve-02.example.net",
+      "url": "https://pve-02.example.net:8006/",
+      "notes": "Cluster node 2 of 3.",
+      "created_at": "2026-09-08T08:58:39Z",
+      "updated_at": "2026-10-23T11:12:44Z",
+      "role": "hypervisor",
+      "tags": [
+        "hypervisor",
+        "linux"
+      ],
+      "states": [
+        {
+          "check": "Automatic security updates",
+          "state": "compliant",
+          "changed_at": "2026-10-01T17:49:02Z"
+        },
+        {
+          "check": "HA cluster quorum",
+          "state": "compliant",
+          "changed_at": "2026-10-23T11:12:44Z"
+        },
+        {
+          "check": "Logs forwarded to SIEM",
+          "state": "compliant",
+          "changed_at": "2026-10-03T05:52:40Z"
+        },
+        {
+          "check": "Management on OOB VLAN",
+          "state": "compliant",
+          "changed_at": "2026-09-11T04:15:21Z"
+        },
+        {
+          "check": "Monitoring agent installed",
+          "state": "compliant",
+          "changed_at": "2026-09-28T02:01:36Z"
+        },
+        {
+          "check": "SSH key-only login",
+          "state": "compliant",
+          "changed_at": "2026-10-07T14:04:39Z"
+        },
+        {
+          "check": "Time synced (NTP)",
+          "state": "pending",
+          "changed_at": "2026-10-12T17:47:03Z"
+        },
+        {
+          "check": "UPS-protected power",
+          "state": "compliant",
+          "changed_at": "2026-09-13T12:55:32Z"
+        }
+      ]
+    },
+    {
+      "name": "pve-03",
+      "ip": "2001:db8:10::23",
+      "fqdn": "pve-03.example.net",
+      "url": "https://pve-03.example.net:8006/",
+      "notes": "Cluster node 3 of 3. IPv6-only management.",
+      "created_at": "2026-09-07T07:12:04Z",
+      "updated_at": "2026-10-24T07:18:45Z",
+      "role": "hypervisor",
+      "tags": [
+        "hypervisor",
+        "linux"
+      ],
+      "states": [
+        {
+          "check": "Automatic security updates",
+          "state": "compliant",
+          "changed_at": "2026-10-02T20:31:34Z"
+        },
+        {
+          "check": "HA cluster quorum",
+          "state": "compliant",
+          "changed_at": "2026-10-11T08:17:20Z"
+        },
+        {
+          "check": "Management on OOB VLAN",
+          "state": "pending",
+          "changed_at": "2026-10-18T00:22:45Z"
+        },
+        {
+          "check": "SSH key-only login",
+          "state": "compliant",
+          "changed_at": "2026-10-09T10:08:31Z"
+        },
+        {
+          "check": "Time synced (NTP)",
+          "state": "pending",
+          "changed_at": "2026-10-24T07:18:45Z"
+        },
+        {
+          "check": "UPS-protected power",
+          "state": "na",
+          "changed_at": "2026-10-09T13:47:14Z"
+        }
+      ]
+    },
+    {
+      "name": "wifi-ap-lobby",
+      "ip": "192.0.2.20",
+      "fqdn": "wifi-ap-lobby.example.net",
+      "url": "https://wifi-ap-lobby.example.net/",
+      "notes": null,
+      "created_at": "2026-09-07T21:24:42Z",
+      "updated_at": "2026-10-17T00:31:11Z",
+      "role": "network",
+      "tags": [
+        "iot",
+        "network"
+      ],
+      "states": [
+        {
+          "check": "Default credentials changed",
+          "state": "pending",
+          "changed_at": "2026-10-14T11:15:39Z"
+        },
+        {
+          "check": "Firmware current",
+          "state": "pending",
+          "changed_at": "2026-10-17T00:31:11Z"
+        },
+        {
+          "check": "Isolated IoT VLAN",
+          "state": "na",
+          "changed_at": "2026-10-01T06:53:11Z"
+        },
+        {
+          "check": "Management on OOB VLAN",
+          "state": "compliant",
+          "changed_at": "2026-10-08T07:54:37Z"
+        },
+        {
+          "check": "Time synced (NTP)",
+          "state": "pending",
+          "changed_at": "2026-10-07T07:34:44Z"
+        }
+      ]
+    },
+    {
+      "name": "www-01",
+      "ip": "203.0.113.80",
+      "fqdn": "www.example.net",
+      "url": "https://www.example.net/",
+      "notes": "Public website.",
+      "created_at": "2026-09-10T10:59:02Z",
+      "updated_at": "2026-10-27T13:57:18Z",
+      "role": "web",
+      "tags": [
+        "backup",
+        "dmz",
+        "linux",
+        "web"
+      ],
+      "states": [
+        {
+          "check": "Automatic security updates",
+          "state": "compliant",
+          "changed_at": "2026-10-25T00:32:43Z"
+        },
+        {
+          "check": "Backups scheduled",
+          "state": "compliant",
+          "changed_at": "2026-10-27T13:57:18Z"
+        },
+        {
+          "check": "Default-deny policy",
+          "state": "compliant",
+          "changed_at": "2026-10-18T12:15:04Z"
+        },
+        {
+          "check": "Logs forwarded to SIEM",
+          "state": "compliant",
+          "changed_at": "2026-10-15T00:17:40Z"
+        },
+        {
+          "check": "Monitoring agent installed",
+          "state": "compliant",
+          "changed_at": "2026-10-26T12:39:09Z"
+        },
+        {
+          "check": "Restore tested",
+          "state": "compliant",
+          "changed_at": "2026-10-09T11:47:29Z"
+        },
+        {
+          "check": "SSH key-only login",
+          "state": "compliant",
+          "changed_at": "2026-09-28T23:28:05Z"
+        },
+        {
+          "check": "Time synced (NTP)",
+          "state": "compliant",
+          "changed_at": "2026-09-16T10:21:18Z"
+        },
+        {
+          "check": "TLS certificate valid",
+          "state": "compliant",
+          "changed_at": "2026-10-19T07:38:57Z"
+        }
+      ]
+    }
+  ],
+  "history": [
+    {
+      "node": "pve-03",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-09T01:39:38Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "db-01",
+      "check": "Least-privilege DB accounts",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-10T06:31:22Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "pve-02",
+      "check": "Management on OOB VLAN",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-11T04:15:21Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "core-sw-01",
+      "check": "Default credentials changed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-12T06:32:51Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "app-02",
+      "check": "HSTS enabled",
+      "from": "pending",
+      "to": "na",
+      "changed_at": "2026-09-12T08:53:34Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "env-sensor-rack",
+      "check": "Isolated IoT VLAN",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-12T12:57:24Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "www-01",
+      "check": "Automatic security updates",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-12T19:14:51Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "db-01",
+      "check": "Backups scheduled",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-13T07:28:02Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "pve-02",
+      "check": "UPS-protected power",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-13T12:55:32Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "db-02",
+      "check": "Disk encryption",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-15T02:26:02Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "edge-fw-01",
+      "check": "Default credentials changed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-15T03:15:48Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "www-01",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-16T10:21:18Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "edge-fw-02",
+      "check": "Management on OOB VLAN",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-18T16:48:48Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "env-sensor-rack",
+      "check": "Isolated IoT VLAN",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-09-18T19:33:12Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "db-02",
+      "check": "Logs forwarded to SIEM",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-19T01:46:15Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "db-02",
+      "check": "Logs forwarded to SIEM",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-09-19T04:24:42Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "db-02",
+      "check": "DB client TLS required",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-19T15:17:38Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "db-02",
+      "check": "Least-privilege DB accounts",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-19T15:39:06Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "pve-01",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-20T16:51:12Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "nas-01",
+      "check": "Monitoring agent installed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-21T13:53:40Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "access-sw-02",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-23T21:09:21Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "pve-01",
+      "check": "Monitoring agent installed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-25T01:45:15Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "core-sw-01",
+      "check": "Firmware current",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-25T09:01:52Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "core-sw-01",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-25T18:48:06Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "nas-01",
+      "check": "UPS-protected power",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-25T18:58:44Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "wifi-ap-lobby",
+      "check": "Default credentials changed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-27T08:39:36Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "pve-02",
+      "check": "Monitoring agent installed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-28T02:01:36Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "edge-fw-01",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-28T20:07:25Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "pve-01",
+      "check": "Automatic security updates",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-28T20:25:10Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "www-01",
+      "check": "SSH key-only login",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-28T23:28:05Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "edge-fw-01",
+      "check": "Default-deny policy",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-29T04:29:52Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "edge-fw-01",
+      "check": "Logs forwarded to SIEM",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-29T09:53:34Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "wifi-ap-lobby",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-29T18:20:00Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "edge-fw-02",
+      "check": "Logs forwarded to SIEM",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-30T04:04:04Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "pve-02",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-09-30T22:38:20Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "pve-01",
+      "check": "Logs forwarded to SIEM",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-01T00:18:12Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "wifi-ap-lobby",
+      "check": "Isolated IoT VLAN",
+      "from": "pending",
+      "to": "na",
+      "changed_at": "2026-10-01T06:53:11Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "pve-02",
+      "check": "Automatic security updates",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-01T17:49:02Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "www-01",
+      "check": "Monitoring agent installed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-02T08:42:09Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "edge-fw-02",
+      "check": "Default credentials changed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-02T13:57:28Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "pve-03",
+      "check": "Automatic security updates",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-02T20:31:34Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "pve-02",
+      "check": "Logs forwarded to SIEM",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-03T05:52:40Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "db-02",
+      "check": "Backups scheduled",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-05T05:08:05Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "db-01",
+      "check": "Automatic security updates",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-05T13:05:46Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "pve-01",
+      "check": "HA cluster quorum",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-05T23:42:17Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "app-02",
+      "check": "TLS certificate valid",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-06T19:46:02Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "edge-fw-02",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-06T23:30:52Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "db-01",
+      "check": "Monitoring agent installed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-07T06:35:59Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "wifi-ap-lobby",
+      "check": "Time synced (NTP)",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-07T07:34:44Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "pve-02",
+      "check": "SSH key-only login",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-07T14:04:39Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "core-sw-01",
+      "check": "Config backed up",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-07T15:48:28Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "access-sw-02",
+      "check": "Firmware current",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-07T17:15:04Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "nas-01",
+      "check": "Management on OOB VLAN",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-07T21:47:12Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "wifi-ap-lobby",
+      "check": "Management on OOB VLAN",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-08T07:54:37Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "env-sensor-rack",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-08T21:08:36Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "pve-03",
+      "check": "SSH key-only login",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-09T10:08:31Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "lab-box",
+      "check": "Logs forwarded to SIEM",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-09T10:30:24Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "www-01",
+      "check": "Restore tested",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-09T11:47:29Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "pve-03",
+      "check": "UPS-protected power",
+      "from": "pending",
+      "to": "na",
+      "changed_at": "2026-10-09T13:47:14Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "pve-01",
+      "check": "UPS-protected power",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-10T07:38:35Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "edge-fw-01",
+      "check": "Config backed up",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-10T15:36:54Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "cam-front-door",
+      "check": "Default credentials changed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-10T21:21:58Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "lab-box",
+      "check": "Automatic security updates",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-11T00:30:58Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "edge-fw-02",
+      "check": "Config backed up",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-11T05:09:25Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "pve-03",
+      "check": "HA cluster quorum",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-11T08:17:20Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "env-sensor-rack",
+      "check": "Config backed up",
+      "from": "pending",
+      "to": "na",
+      "changed_at": "2026-10-11T16:01:16Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "db-01",
+      "check": "Disk encryption",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-11T18:05:09Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "db-01",
+      "check": "Restore tested",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-12T02:43:31Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "pve-02",
+      "check": "Time synced (NTP)",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-12T17:47:03Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "app-02",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-13T05:50:36Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "db-01",
+      "check": "DB client TLS required",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-13T06:53:49Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "pve-03",
+      "check": "Management on OOB VLAN",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-13T08:03:44Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "edge-fw-02",
+      "check": "Firmware current",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-13T08:43:44Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "env-sensor-rack",
+      "check": "Management on OOB VLAN",
+      "from": "pending",
+      "to": "na",
+      "changed_at": "2026-10-13T14:16:00Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "wifi-ap-lobby",
+      "check": "Firmware current",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-13T17:13:01Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "edge-fw-02",
+      "check": "Config backed up",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-13T18:05:06Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "edge-fw-01",
+      "check": "Management on OOB VLAN",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-13T18:34:12Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "wifi-ap-lobby",
+      "check": "Default credentials changed",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-14T11:15:39Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "pve-01",
+      "check": "SSH key-only login",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-14T15:01:20Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "www-01",
+      "check": "Default-deny policy",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-14T16:11:53Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "www-01",
+      "check": "Logs forwarded to SIEM",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-15T00:17:40Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "nas-01",
+      "check": "Management on OOB VLAN",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-15T17:43:03Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "nas-01",
+      "check": "Disk encryption",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-15T22:33:39Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "www-01",
+      "check": "Backups scheduled",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-16T07:13:32Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "www-01",
+      "check": "Default-deny policy",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-16T13:48:16Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "edge-fw-01",
+      "check": "Firmware current",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-16T19:11:14Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "wifi-ap-lobby",
+      "check": "Firmware current",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-17T00:31:11Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "db-01",
+      "check": "SSH key-only login",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-17T03:58:31Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "nas-01",
+      "check": "Restore tested",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-17T08:26:33Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "www-01",
+      "check": "TLS certificate valid",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-17T14:27:42Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "lab-box",
+      "check": "Logs forwarded to SIEM",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-17T21:14:34Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "pve-03",
+      "check": "Management on OOB VLAN",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-18T00:22:45Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "app-02",
+      "check": "Automatic security updates",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-18T10:27:14Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "www-01",
+      "check": "TLS certificate valid",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-18T11:56:58Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "www-01",
+      "check": "Default-deny policy",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-18T12:15:04Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "www-01",
+      "check": "TLS certificate valid",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-19T07:38:57Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "app-02",
+      "check": "SSH key-only login",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-19T12:03:24Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "edge-fw-02",
+      "check": "Time synced (NTP)",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-19T17:36:26Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "core-sw-01",
+      "check": "Management on OOB VLAN",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-19T18:46:33Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "www-01",
+      "check": "Backups scheduled",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-19T22:23:32Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "cam-front-door",
+      "check": "Default credentials changed",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-20T00:11:20Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "lab-box",
+      "check": "Automatic security updates",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-20T10:11:30Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "db-02",
+      "check": "Restore tested",
+      "from": "pending",
+      "to": "na",
+      "changed_at": "2026-10-20T15:16:34Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "app-02",
+      "check": "Time synced (NTP)",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-21T01:39:45Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "app-02",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-21T05:25:01Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "db-02",
+      "check": "Least-privilege DB accounts",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-21T19:40:55Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "www-01",
+      "check": "Automatic security updates",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-22T01:19:02Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "app-02",
+      "check": "TLS certificate valid",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-22T04:25:51Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "nas-01",
+      "check": "Default credentials changed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-22T07:14:47Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "www-01",
+      "check": "Monitoring agent installed",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-22T13:01:43Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "db-02",
+      "check": "Backups scheduled",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-22T23:13:43Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "app-02",
+      "check": "Logs forwarded to SIEM",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-23T02:30:39Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "pve-02",
+      "check": "HA cluster quorum",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-23T11:12:44Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "pve-03",
+      "check": "Time synced (NTP)",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-24T07:18:45Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "pve-01",
+      "check": "Management on OOB VLAN",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-24T21:37:44Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "www-01",
+      "check": "Automatic security updates",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-25T00:32:43Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "db-02",
+      "check": "Least-privilege DB accounts",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-25T00:57:17Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "app-02",
+      "check": "Automatic security updates",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-25T02:51:00Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "access-sw-02",
+      "check": "Management on OOB VLAN",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-25T06:11:59Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "access-sw-02",
+      "check": "Management on OOB VLAN",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-25T17:37:16Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "app-02",
+      "check": "Backups scheduled",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-25T20:28:23Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "app-02",
+      "check": "Backups scheduled",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-25T21:57:23Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "nas-01",
+      "check": "Backups scheduled",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-26T01:23:44Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "app-02",
+      "check": "Logs forwarded to SIEM",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-26T02:51:12Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "nas-01",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-26T07:29:06Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "www-01",
+      "check": "Monitoring agent installed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-26T12:39:09Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "access-sw-02",
+      "check": "Default credentials changed",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-26T16:24:00Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "nas-01",
+      "check": "Backups scheduled",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-26T19:02:55Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "nas-01",
+      "check": "Time synced (NTP)",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-26T22:47:37Z",
+      "client_ip": "2001:db8:100::25"
+    },
+    {
+      "node": "nas-01",
+      "check": "Backups scheduled",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-27T02:21:42Z",
+      "client_ip": "198.51.100.11"
+    },
+    {
+      "node": "edge-fw-02",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-27T05:48:31Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "www-01",
+      "check": "Backups scheduled",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-27T13:57:18Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "nas-01",
+      "check": "Time synced (NTP)",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-27T22:08:19Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "app-02",
+      "check": "Logs forwarded to SIEM",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-28T03:58:53Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "access-sw-02",
+      "check": "Time synced (NTP)",
+      "from": "compliant",
+      "to": "pending",
+      "changed_at": "2026-10-28T06:55:00Z",
+      "client_ip": "198.51.100.10"
+    },
+    {
+      "node": "app-02",
+      "check": "Automatic security updates",
+      "from": "pending",
+      "to": "compliant",
+      "changed_at": "2026-10-28T07:00:55Z",
+      "client_ip": "198.51.100.10"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{% extends "config/base.html" %}
+{% from "_macros.html" import tag_chips %}
+{% block title %}Tags · Configuration{% endblock %}
+{% block config %}
+<details class="card add-card" {{ 'open' if not tags }}>
+  <summary><span class="btn primary">+ New tag</span></summary>
+  <form method="post" class="form">
+    <div class="field-row">
+      <label class="field"><span>Name</span><input name="name" required maxlength="64" placeholder="e.g. linux"></label>
+      <label class="field"><span>Description <em>optional</em></span><input name="description" maxlength="1000"></label>
+    </div>
+    {% if checks %}
+    <fieldset class="field"><legend>Requires checks</legend>
+      <div class="checkgrid">{% for c in checks %}<label><input type="checkbox" name="check_ids" value="{{ c.id }}"> {{ c.name }}</label>{% endfor %}</div>
+    </fieldset>
+    {% endif %}
+    <div class="actions"><button class="btn primary">Add tag</button></div>
+  </form>
+</details>
+<p class="muted small">Tags typed on a node are created automatically and show up here.</p>
+
+{% if tags %}
+<form id="bulk-form" class="bulk-bar" method="post" action="{{ url_for('main.config_bulk_delete', kind='tags') }}" data-bulk data-noun="tag">
+  <label class="check-label"><input type="checkbox" data-bulk-all> Select all</label>
+  <button class="btn danger-ghost" disabled data-bulk-submit>Delete selected</button>
+</form>
+<ul class="item-list">
+  {% for t in tags %}
+  <li class="card item" id="tag-{{ t.id }}">
+    <div class="item-head">
+      <input type="checkbox" name="ids" value="{{ t.id }}" form="bulk-form" class="bulk-cb" aria-label="Select {{ t.name }}">
+      <div class="item-body">
+        <div class="item-name"><span class="chip">{{ t.name }}</span></div>
+        {% if t.description %}<div class="item-desc">{{ t.description }}</div>{% endif %}
+      </div>
+      <div class="item-meta">
+        <a class="small" href="{{ url_for('main.nodes', tag=t.name) }}">{{ t.node_count }} node{{ 's' if t.node_count != 1 }}</a>
+      </div>
+    </div>
+    <div class="item-tags"><span class="muted small">Requires</span>
+      {% for c in links.get(t.id, []) %}<span class="chip check-chip">{{ c.name }}</span>{% else %}<span class="muted">—</span>{% endfor %}
+    </div>
+    <details class="edit">
+      <summary>Edit</summary>
+      <form method="post" action="{{ url_for('main.config_tag_update', tag_id=t.id) }}" class="form">
+        <div class="field-row">
+          <label class="field"><span>Name</span><input name="name" value="{{ t.name }}" required maxlength="64"></label>
+          <label class="field"><span>Description</span><input name="description" value="{{ t.description or '' }}" maxlength="1000"></label>
+        </div>
+        {% set linked = links.get(t.id, [])|map(attribute='id')|list %}
+        {% if checks %}
+        <fieldset class="field"><legend>Requires checks</legend>
+          <div class="checkgrid">{% for c in checks %}<label><input type="checkbox" name="check_ids" value="{{ c.id }}" {{ 'checked' if c.id in linked }}> {{ c.name }}</label>{% endfor %}</div>
+        </fieldset>
+        {% endif %}
+        <div class="actions">
+          <button class="btn primary">Save</button>
+          <button class="btn danger-ghost" formaction="{{ url_for('main.config_tag_delete', tag_id=t.id) }}" data-confirm="Delete tag “{{ t.name }}”? It is removed from {{ t.node_count }} node(s).">Delete</button>
+        </div>
+      </form>
+    </details>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

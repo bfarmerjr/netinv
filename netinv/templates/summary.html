@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Summary{% endblock %}
+
+{% macro pct(t) %}{{ '—' if t.pct is none else t.pct ~ '%' }}{% endmacro %}
+{% macro counts(t) %}{{ t.compliant }}/{{ t.applicable }} compliant{% if t.pending %} · {{ t.pending }} pending{% endif %}{% if t.na %} · {{ t.na }} N/A{% endif %}{% endmacro %}
+{% macro stack(t, cls='') %}
+  <div class="stack {{ cls }}" role="img" aria-label="{{ pct(t) }} compliant: {{ t.compliant }} compliant, {{ t.pending }} pending, {{ t.na }} N/A">
+    {% if t.total %}{% for s in ('compliant', 'pending', 'na') if t[s] %}<span class="s-{{ s }}" style="flex-grow: {{ t[s] }}"></span>{% endfor %}{% endif %}
+  </div>
+{% endmacro %}
+{% macro role_name(g) %}{% if g.role %}<a href="{{ url_for('main.nodes', tag=g.role) }}">{{ g.label }}</a>{% else %}<span class="muted">{{ g.label }}</span>{% endif %}{% endmacro %}
+
+{% block content %}
+<div class="page-head">
+  <div><h1>Summary</h1><p class="sub">Compliance at a glance, overall and per role. The <a href="{{ url_for('main.report') }}">report</a> has the details.</p></div>
+  <div class="seg view-switch" role="group" aria-label="Chart style">
+    {% for key, label in views %}<button type="button" class="seg-btn" data-view="{{ key }}" aria-pressed="{{ 'true' if loop.first else 'false' }}">{{ label }}</button>{% endfor %}
+  </div>
+</div>
+
+<div class="summary" id="summary" data-view="rings">
+<script>try { var v = localStorage.getItem("netinv-summary-view"); if (v) document.getElementById("summary").dataset.view = v; } catch (e) {}</script>
+
+<div class="legend">
+  <span><i class="s-compliant"></i>Compliant</span><span><i class="s-pending"></i>Pending</span><span><i class="s-na"></i>N/A</span>
+  <span class="muted">Percentages leave out N/A checks.</span>
+</div>
+
+{% set o = overall %}
+<section class="card overall">
+  <h2>Overall</h2>
+  {% if not o.nodes %}
+    <p class="muted">No nodes yet. <a href="{{ url_for('main.node_new') }}">Add a node</a> to see a summary.</p>
+  {% else %}
+  <div class="sv sv-rings overall-rings">
+    {{ ring(o, 150) }}
+    <dl class="kv">
+      <dt>Compliant</dt><dd class="ok-text">{{ o.compliant }}</dd>
+      <dt>Pending</dt><dd class="warn-text">{{ o.pending }}</dd>
+      <dt>N/A</dt><dd>{{ o.na }}</dd>
+      <dt>Nodes complete</dt><dd>{{ o.complete }} of {{ o.nodes }}</dd>
+    </dl>
+  </div>
+  <div class="sv sv-stacked">
+    <div class="stack-head"><strong class="big-pct">{{ pct(o) }}</strong><span class="muted">{{ counts(o) }}</span></div>
+    {{ stack(o, 'thick') }}
+  </div>
+  <div class="sv sv-bars">
+    <div class="hbars">
+      {% for s in ('compliant', 'pending', 'na') %}
+      <span>{{ STATE_LABELS[s] }}</span>
+      <div class="hbar-track"><span class="s-{{ s }}" style="width: {{ (100 * o[s] / o.total) if o.total else 0 }}%"></span></div>
+      <span class="num">{{ o[s] }}</span>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="sv sv-text">
+    <p class="text-overall"><strong class="big-pct">{{ pct(o) }}</strong> compliant</p>
+    <p>{{ o.compliant }} of {{ o.applicable }} applicable checks are compliant, {{ o.pending }} pending and {{ o.na }} marked N/A.
+      {{ o.complete }} of {{ o.nodes }} node{{ '' if o.nodes == 1 else 's' }} {{ 'is' if o.complete == 1 else 'are' }} fully compliant{% if o.none %}; {{ o.none }} {{ 'has' if o.none == 1 else 'have' }} no checks{% endif %}.</p>
+  </div>
+  {% endif %}
+</section>
+
+{% if groups %}
+<h2 class="section-title">By role</h2>
+
+<div class="sv sv-rings role-rings">
+  {% for g in groups %}{% set t = g.totals %}
+  <div class="card role-card">
+    {{ ring(t, 96) }}
+    <div class="role-name">{{ role_name(g) }}</div>
+    <div class="muted small">{{ t.nodes }} node{{ '' if t.nodes == 1 else 's' }} · {{ t.compliant }}/{{ t.applicable }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="sv sv-stacked card">
+  <div class="stack-rows">
+    {% for g in groups %}{% set t = g.totals %}
+    <div class="stack-row">
+      <div class="role-name">{{ role_name(g) }}</div>
+      {{ stack(t) }}
+      <strong class="num">{{ pct(t) }}</strong>
+      <span class="muted small">{{ counts(t) }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="sv sv-bars card">
+  <div class="vbars">
+    {% for g in groups %}{% set t = g.totals %}
+    <div class="vbar-group">
+      <div class="vbar-cols" role="img" aria-label="{{ g.label }}: {{ t.compliant }} compliant, {{ t.pending }} pending, {{ t.na }} N/A">
+        {% for s in ('compliant', 'pending', 'na') %}
+        <div class="vbar-col"><span class="num">{{ t[s] }}</span><span class="vbar s-{{ s }}" style="height: {{ (100 * t[s] / peak) if peak else 0 }}%"></span></div>
+        {% endfor %}
+      </div>
+      <div class="role-name">{{ role_name(g) }}</div>
+      <div class="muted small">{{ pct(t) }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="sv sv-text card flush">
+  <table class="table text-table">
+    <thead><tr><th>Role</th><th>Nodes</th><th>Compliance</th><th>Compliant</th><th>Pending</th><th>N/A</th></tr></thead>
+    <tbody>
+    {% for g in groups %}{% set t = g.totals %}
+      <tr>
+        <td class="cell-name">{{ role_name(g) }}</td>
+        <td data-label="Nodes">{{ t.nodes }}</td>
+        <td data-label="Compliance"><strong>{{ pct(t) }}</strong></td>
+        <td data-label="Compliant">{{ t.compliant }}/{{ t.applicable }}</td>
+        <td data-label="Pending" class="{{ 'warn-text' if t.pending }}">{{ t.pending }}</td>
+        <td data-label="N/A">{{ t.na }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% from "_macros.html" import progress, tag_chips, state_pill, url_link %}
+{% block title %}{{ node.name }}{% endblock %}
+{% block content %}
+<nav class="crumbs"><a href="{{ url_for('main.nodes') }}">Nodes</a> /</nav>
+<div class="page-head">
+  <div>
+    <h1>{{ node.name }}{{ url_link(node) }}</h1>
+    <p class="sub mono">{{ node.ip }}{% if node.fqdn %} · {{ node.fqdn }}{% endif %}</p>
+  </div>
+  <div class="head-actions">
+    <a class="btn" href="{{ url_for('main.node_edit', node_id=node.id) }}">Edit</a>
+    <form method="post" action="{{ url_for('main.node_delete', node_id=node.id) }}" data-confirm="Delete {{ node.name }}? Its check states are removed; history entries are kept.">
+      <button class="btn danger-ghost">Delete</button>
+    </form>
+  </div>
+</div>
+
+<div class="detail-grid">
+  <section class="card">
+    <div class="card-head">
+      <h2>Checks</h2>
+      <div id="node-progress">{{ progress(summary, 40) }}</div>
+    </div>
+    {% if not tags %}
+      <div class="empty inset">This node has no tags, so no checks apply. <a href="{{ url_for('main.node_edit', node_id=node.id) }}">Add tags</a></div>
+    {% elif not checks %}
+      <div class="empty inset">None of this node's tags require any checks yet. <a href="{{ url_for('main.config_matrix', kind='tag-checks') }}">Link checks to tags</a></div>
+    {% else %}
+    <ul class="checklist">
+      {% for c in checks %}
+      <li class="check" id="check-{{ c.check_id }}" data-state="{{ c.state }}">
+        <div class="check-main">
+          <div class="check-name">{{ c.name }}</div>
+          {% if c.description %}<div class="check-desc">{{ c.description }}</div>{% endif %}
+          <div class="check-meta">
+            <span class="via">via {% for t in c.via_tags %}<span class="chip sm">{{ t }}</span>{% endfor %}</span>
+            <span class="check-ts">{% if c.changed_at %}changed {{ c.changed_at|ts }}{% else %}never changed{% endif %}</span>
+          </div>
+        </div>
+        <form class="seg" method="post" action="{{ url_for('main.set_check_state', node_id=node.id, check_id=c.check_id) }}" data-check>
+          {% for s in STATES %}
+          <button type="submit" name="state" value="{{ s }}" class="seg-btn {{ s }}" aria-pressed="{{ 'true' if c.state == s else 'false' }}">
+            {%- if s == 'compliant' %}<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>{% endif -%}
+            {{ STATE_LABELS[s] }}
+          </button>
+          {% endfor %}
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </section>
+
+  <aside class="side">
+    <section class="card">
+      <h2>Details</h2>
+      <dl class="kv">
+        <dt>IP</dt><dd class="mono">{{ node.ip }}</dd>
+        <dt>FQDN</dt><dd class="mono">{{ node.fqdn or '—' }}</dd>
+        <dt>URL</dt><dd class="mono">{% if node.url %}<a href="{{ node.url }}" target="_blank" rel="noopener noreferrer">{{ node.url }}</a> {{ url_link(node) }}{% else %}—{% endif %}</dd>
+        <dt>Role</dt>
+        <dd>
+          {% if tags %}
+          <form method="post" action="{{ url_for('main.node_role', node_id=node.id) }}" class="role-form">
+            <select name="role" aria-label="Role" data-autosubmit>
+              <option value="">No role</option>
+              {% for t in tags %}<option {{ 'selected' if t.name == node.role }}>{{ t.name }}</option>{% endfor %}
+            </select>
+            <noscript><button class="btn">Set</button></noscript>
+          </form>
+          {% else %}<span class="muted">Add tags to choose a role</span>{% endif %}
+        </dd>
+        <dt>Tags</dt><dd>{{ tag_chips(tags) }}</dd>
+        {% if node.notes %}<dt>Notes</dt><dd class="notes">{{ node.notes }}</dd>{% endif %}
+        <dt>Added</dt><dd>{{ node.created_at|ts }}</dd>
+        <dt>Updated</dt><dd>{{ node.updated_at|ts }}</dd>
+      </dl>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Recent changes</h2>{% if history %}<a class="small" href="{{ url_for('main.history', node=node.id) }}">All</a>{% endif %}</div>
+      {% if history %}
+      <ul class="timeline">
+        {% for h in history %}
+        <li><span class="tl-check">{{ h.check_name }}</span>
+          <span class="tl-change">{{ state_pill(h.old_state) }} → {{ state_pill(h.new_state) }}</span>
+          <span class="tl-time">{{ h.changed_at|ts }}</span></li>
+        {% endfor %}
+      </ul>
+      {% else %}<p class="muted small">No changes recorded yet.</p>{% endif %}
+    </section>
+  </aside>
+</div>
+{% endblock %}

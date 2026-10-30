@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Add node' if is_new else 'Edit ' ~ node.name }}{% endblock %}
+{% block content %}
+<nav class="crumbs"><a href="{{ url_for('main.nodes') }}">Nodes</a>{% if not is_new %} / <a href="{{ url_for('main.node_detail', node_id=node.id) }}">{{ node.name }}</a>{% endif %}</nav>
+<div class="page-head"><h1>{{ 'Add node' if is_new else 'Edit node' }}</h1></div>
+
+<form method="post" class="card form narrow" novalidate>
+  <label class="field {{ 'has-error' if errors.name }}">
+    <span>Friendly name</span>
+    <input name="name" value="{{ node.name or '' }}" required maxlength="100" autofocus placeholder="e.g. core-switch-01">
+    {% if errors.name %}<small class="error">{{ errors.name }}</small>{% endif %}
+  </label>
+  <div class="field-row">
+    <label class="field {{ 'has-error' if errors.ip }}">
+      <span>IP address <em>IPv4 or IPv6</em></span>
+      <input name="ip" value="{{ node.ip or '' }}" required class="mono" placeholder="192.0.2.10 or 2001:db8::10" inputmode="text" autocapitalize="off" spellcheck="false">
+      {% if errors.ip %}<small class="error">{{ errors.ip }}</small>{% endif %}
+    </label>
+    <label class="field {{ 'has-error' if errors.fqdn }}">
+      <span>FQDN</span>
+      <input name="fqdn" value="{{ node.fqdn or '' }}" required class="mono" placeholder="host.example.net" autocapitalize="off" spellcheck="false">
+      {% if errors.fqdn %}<small class="error">{{ errors.fqdn }}</small>{% endif %}
+    </label>
+  </div>
+  <label class="field {{ 'has-error' if errors.url }}">
+    <span>URL <em>optional — e.g. the device's web UI</em></span>
+    <input name="url" type="url" value="{{ node.url or '' }}" class="mono" placeholder="https://host.example.net/" autocapitalize="off" spellcheck="false" maxlength="2000">
+    {% if errors.url %}<small class="error">{{ errors.url }}</small>{% endif %}
+  </label>
+  <label class="field">
+    <span>Tags <em>comma-separated; new tags are created automatically</em></span>
+    <input name="tags" value="{{ tags }}" data-tag-input list="tag-list" autocapitalize="off" placeholder="linux, dmz, backup">
+    <datalist id="tag-list">{% for t in all_tags %}<option value="{{ t.name }}">{% endfor %}</datalist>
+  </label>
+  <label class="field">
+    <span>Role <em>the node's primary tag, shown in the node list</em></span>
+    <select name="role" data-role-select data-tags-from="tags">
+      <option value="">No role</option>
+      {% for t in tags.split(',') if t.strip() %}<option {{ 'selected' if node.role and t.strip()|lower == node.role|lower }}>{{ t.strip() }}</option>{% endfor %}
+    </select>
+  </label>
+  <label class="field">
+    <span>Notes <em>optional</em></span>
+    <textarea name="notes" rows="4">{{ node.notes or '' }}</textarea>
+  </label>
+  <div class="actions">
+    <button class="btn primary">{{ 'Add node' if is_new else 'Save changes' }}</button>
+    <a class="btn ghost" href="{{ url_for('main.nodes') if is_new else url_for('main.node_detail', node_id=node.id) }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

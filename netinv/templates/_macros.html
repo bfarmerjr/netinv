@@ -1,0 +1,26 @@
+{% macro progress(s, size=28) -%}
+{%- if s.status == 'none' -%}
+<span class="progress none">{{ donut(s, size) }}<span class="progress-label">No checks</span></span>
+{%- else -%}
+<span class="progress {{ s.status }}" title="{{ s.compliant }} compliant, {{ s.pending }} pending, {{ s.na }} N/A">
+  {{ donut(s, size) }}
+  <span class="progress-label"><strong class="pct">{{ s.pct }}%</strong>
+    <span class="muted">{{ s.compliant }}/{{ s.applicable }}{% if s.na %} · {{ s.na }} N/A{% endif %}</span></span>
+</span>
+{%- endif -%}
+{%- endmacro %}
+
+{% macro state_pill(state) -%}
+<span class="pill {{ state }}">{{ STATE_LABELS[state] }}</span>
+{%- endmacro %}
+
+{% macro tag_chips(tags, link=true) -%}
+{%- for t in tags -%}
+{% if link %}<a class="chip" href="{{ url_for('main.nodes', tag=t.name) }}">{{ t.name }}</a>{% else %}<span class="chip">{{ t.name }}</span>{% endif %}
+{%- else -%}<span class="muted">—</span>
+{%- endfor -%}
+{%- endmacro %}
+
+{% macro url_link(node) -%}
+{%- if node.url %}<a class="ext-link" href="{{ node.url }}" target="_blank" rel="noopener noreferrer" title="Open {{ node.url }} in a new tab" aria-label="Open {{ node.name }} in a new tab"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>{% endif -%}
+{%- endmacro %}

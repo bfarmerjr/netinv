@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% from "_macros.html" import progress, tag_chips, state_pill %}
+{% block title %}Report{% endblock %}
+{% block body_class %}report-page{% endblock %}
+{% block content %}
+{% set qs = {'q': filters.q, 'tag': filters.tag, 'status': filters.status, 'history': '1' if include_history else ''} %}
+<div class="page-head">
+  <div>
+    <h1>Compliance report</h1>
+    <p class="sub">Generated {{ generated_at|ts }}<span class="tz-note"></span>
+      {% if filters.q or filters.tag or filters.status %}
+      · Filtered:
+        {% if filters.q %}“{{ filters.q }}”{% endif %}
+        {% if filters.tag %}tag <strong>{{ filters.tag }}</strong>{% endif %}
+        {% if filters.status %}<strong>{{ status_filters[filters.status] }}</strong>{% endif %}
+      {% endif %}
+    </p>
+  </div>
+  <div class="head-actions no-print">
+    <button class="btn" type="button" data-print>Print / PDF</button>
+    <a class="btn" href="{{ url_for('main.report_csv', **qs) }}">CSV</a>
+    <a class="btn" href="{{ url_for('main.report_json', **qs) }}">JSON</a>
+  </div>
+</div>
+
+<form class="filters no-print" method="get">
+  <input type="search" name="q" value="{{ filters.q }}" placeholder="Search…" aria-label="Search">
+  <select name="tag" aria-label="Tag">
+    <option value="">All tags</option>
+    {% for t in all_tags %}<option {{ 'selected' if t.name|lower == filters.tag|lower }}>{{ t.name }}</option>{% endfor %}
+  </select>
+  <select name="status" aria-label="Status">
+    <option value="">Any status</option>
+    {% for k, v in status_filters.items() %}<option value="{{ k }}" {{ 'selected' if filters.status == k }}>{{ v }}</option>{% endfor %}
+  </select>
+  <label class="check-label"><input type="checkbox" name="history" value="1" {{ 'checked' if include_history }}> Include change history</label>
+  <button class="btn primary">Generate</button>
+</form>
+
+<div class="stats">
+  <div class="stat"><span class="stat-num">{{ totals.nodes }}</span><span class="stat-label">Nodes</span></div>
+  <div class="stat"><span class="stat-num ok-text">{{ totals.complete }}</span><span class="stat-label">Fully compliant</span></div>
+  <div class="stat"><span class="stat-num warn-text">{{ totals.incomplete }}</span><span class="stat-label">Need attention</span></div>
+  <div class="stat"><span class="stat-num">{{ totals.compliant }}<small>/{{ totals.applicable }}</small></span><span class="stat-label">Checks compliant</span></div>
+  <div class="stat"><span class="stat-num">{{ totals.na }}</span><span class="stat-label">Checks N/A</span></div>
+  <div class="stat"><span class="stat-num">{{ totals.pct if totals.pct is not none else '—' }}{% if totals.pct is not none %}<small>%</small>{% endif %}</span><span class="stat-label">Overall</span></div>
+</div>
+
+{% if items %}
+<h2 class="section-title">Summary</h2>
+<div class="card flush">
+<table class="table report-summary">
+  <thead><tr><th>Node</th><th>IP</th><th>FQDN</th><th>Role</th><th>Compliance</th></tr></thead>
+  <tbody>
+  {% for it in items %}
+  <tr>
+    <td class="cell-name"><a href="#node-{{ it.node.id }}">{{ it.node.name }}</a></td>
+    <td class="mono" data-label="IP">{{ it.node.ip }}</td>
+    <td class="mono" data-label="FQDN">{{ it.node.fqdn or '—' }}</td>
+    <td class="cell-tags" data-label="Role">{% if it.node.role %}<span class="chip role">{{ it.node.role }}</span>{% else %}<span class="muted">—</span>{% endif %}</td>
+    <td class="cell-progress">{{ progress(it.summary) }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+
+<h2 class="section-title">Node details</h2>
+{% for it in items %}
+<section class="card report-node" id="node-{{ it.node.id }}">
+  <div class="card-head">
+    <h3><a href="{{ url_for('main.node_detail', node_id=it.node.id) }}">{{ it.node.name }}</a></h3>
+    {{ progress(it.summary) }}
+  </div>
+  <dl class="kv inline">
+    <dt>IP</dt><dd class="mono">{{ it.node.ip }}</dd>
+    <dt>FQDN</dt><dd class="mono">{{ it.node.fqdn or '—' }}</dd>
+    {% if it.node.url %}<dt>URL</dt><dd class="mono"><a href="{{ it.node.url }}" target="_blank" rel="noopener noreferrer">{{ it.node.url }}</a></dd>{% endif %}
+    <dt>Role</dt><dd>{{ it.node.role or '—' }}</dd>
+    <dt>Tags</dt><dd>{{ tag_chips(it.tags, link=false) }}</dd>
+    {% if it.node.notes %}<dt>Notes</dt><dd class="notes">{{ it.node.notes }}</dd>{% endif %}
+  </dl>
+  {% if it.checks %}
+  <table class="table compact">
+    <thead><tr><th>Check</th><th>Required by</th><th>Status</th><th>Last changed</th></tr></thead>
+    <tbody>
+    {% for c in it.checks %}
+      <tr><td>{{ c.name }}</td><td class="muted">{{ c.via_tags|join(', ') }}</td><td>{{ state_pill(c.state) }}</td><td>{{ c.changed_at|ts }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted small">No checks apply to this node.</p>
+  {% endif %}
+  {% if include_history %}
+  <h4>Change history</h4>
+  {% if it.history %}
+  <table class="table compact">
+    <thead><tr><th>When</th><th>Check</th><th>Change</th></tr></thead>
+    <tbody>
+    {% for h in it.history %}
+      <tr><td>{{ h.changed_at|ts }}</td><td>{{ h.check_name }}</td><td>{{ state_pill(h.old_state) }} → {{ state_pill(h.new_state) }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="muted small">No changes recorded.</p>{% endif %}
+  {% endif %}
+</section>
+{% endfor %}
+{% else %}
+<div class="empty">No nodes match this report's filters.</div>
+{% endif %}
+{% endblock %}

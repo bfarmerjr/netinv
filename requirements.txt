@@ -1,0 +1,4 @@
+# Direct dependencies with minimum supported versions.
+# requirements.lock pins the exact versions NetInv is tested with.
+Flask>=3.0
+gunicorn>=22.0

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "_macros.html" import state_pill %}
+{% block title %}History{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>History</h1><p class="sub">Every check state change, newest first (last 500).</p></div>
+</div>
+<form class="filters" method="get">
+  <select name="node" aria-label="Node" onchange="this.form.submit()">
+    <option value="">All nodes</option>
+    {% for n in nodes %}<option value="{{ n.id }}" {{ 'selected' if n.id == node_id }}>{{ n.name }}</option>{% endfor %}
+  </select>
+  <noscript><button class="btn">Filter</button></noscript>
+</form>
+{% if rows %}
+<div class="card flush">
+<table class="table history-table">
+  <thead><tr><th>When</th><th>Node</th><th>Check</th><th>Change</th><th>From</th></tr></thead>
+  <tbody>
+  {% for h in rows %}
+  <tr>
+    <td data-label="When">{{ h.changed_at|ts }}</td>
+    <td data-label="Node">{% if h.node_id %}<a href="{{ url_for('main.node_detail', node_id=h.node_id) }}">{{ h.node_name }}</a>{% else %}{{ h.node_name }} <span class="muted small">(deleted)</span>{% endif %}</td>
+    <td data-label="Check">{{ h.check_name }}</td>
+    <td data-label="Change">{{ state_pill(h.old_state) }} → {{ state_pill(h.new_state) }}</td>
+    <td data-label="From" class="mono muted">{{ h.client_ip or '' }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<div class="empty">No changes recorded yet.</div>
+{% endif %}
+{% endblock %}

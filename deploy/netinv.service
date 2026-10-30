@@ -1,0 +1,22 @@
+# systemd unit for NetInv. Adjust User/Group and paths to your install,
+# then see README.md ("Run as a service"). Settings live in netinv.conf.
+[Unit]
+Description=NetInv network inventory
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=netinv
+Group=netinv
+WorkingDirectory=/opt/netinv
+ExecStart=/opt/netinv/run.sh
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+# Remove ProtectHome if you install under /home.
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

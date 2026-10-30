@@ -1,0 +1,13 @@
+{% extends "config/base.html" %}
+{% block title %}Clear data · Configuration{% endblock %}
+{% block config %}
+<p class="muted small">Currently stored: {{ stats.nodes }} nodes · {{ stats.checks }} checks · {{ stats.tags }} tags · {{ stats.history }} history entries.</p>
+<section class="card danger-zone">
+  <h2>Clear all data</h2>
+  <p class="muted small">Permanently deletes every node, check, tag, check state and history entry. Admin info is kept. Consider <a href="{{ url_for('main.config_data') }}">exporting</a> first.</p>
+  <form method="post" action="{{ url_for('main.config_clear') }}" class="form inline-form" data-confirm="Really delete ALL data? This cannot be undone.">
+    <label class="field"><span>Type <code>DELETE</code> to confirm</span><input name="confirm" autocomplete="off" required pattern="DELETE" spellcheck="false"></label>
+    <button class="btn danger">Clear all data</button>
+  </form>
+</section>
+{% endblock %}

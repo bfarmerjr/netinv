@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% from "_macros.html" import progress, tag_chips, url_link %}
+{% block title %}Nodes{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Nodes</h1>
+    <p class="sub summary-links">
+      <a href="{{ url_for('main.nodes') }}" class="{{ 'active' if not (q or tag or status) }}">{{ counts.nodes }} node{{ 's' if counts.nodes != 1 }}</a>
+      {% if counts.nodes %}
+      · <a href="{{ url_for('main.nodes', status='complete') }}" class="ok-text {{ 'active' if status == 'complete' }}">{{ counts.complete }} complete</a>
+      · <a href="{{ url_for('main.nodes', status='incomplete') }}" class="warn-text {{ 'active' if status == 'incomplete' }}">{{ counts.incomplete }} need attention</a>
+      {% if counts.none %}· <a href="{{ url_for('main.nodes', status='none') }}" class="{{ 'active' if status == 'none' }}">{{ counts.none }} without checks</a>{% endif %}
+      {% endif %}
+    </p>
+  </div>
+  <a class="btn primary" href="{{ url_for('main.node_new') }}">+ Add node</a>
+</div>
+
+{% if counts.nodes %}
+<form class="filters" method="get">
+  <input type="search" name="q" value="{{ q }}" placeholder="Search name, IP, FQDN, tag…" aria-label="Search">
+  <select name="tag" aria-label="Tag">
+    <option value="">All tags</option>
+    {% for t in all_tags %}<option {{ 'selected' if t.name|lower == tag|lower }}>{{ t.name }}</option>{% endfor %}
+  </select>
+  <select name="status" aria-label="Status">
+    <option value="">Any status</option>
+    {% for k, v in status_filters.items() %}<option value="{{ k }}" {{ 'selected' if status == k }}>{{ v }}</option>{% endfor %}
+  </select>
+  <button class="btn">Filter</button>
+  {% if q or tag or status %}<a class="btn ghost" href="{{ url_for('main.nodes') }}">Clear</a>{% endif %}
+</form>
+{% endif %}
+
+{% if items %}
+<div class="card flush">
+<table class="table nodes-table">
+  <thead><tr><th>Name</th><th>IP</th><th>FQDN</th><th>Role</th><th>Compliance</th></tr></thead>
+  <tbody>
+  {% for it in items %}
+    <tr data-href="{{ url_for('main.node_detail', node_id=it.node.id) }}">
+      <td class="cell-name"><a href="{{ url_for('main.node_detail', node_id=it.node.id) }}">{{ it.node.name }}</a>{{ url_link(it.node) }}</td>
+      <td class="mono" data-label="IP">{{ it.node.ip }}</td>
+      <td class="mono" data-label="FQDN">{{ it.node.fqdn or '—' }}</td>
+      <td class="cell-tags" data-label="Role" title="Tags: {{ it.tags|map(attribute='name')|join(', ') or 'none' }}">
+        {%- if it.node.role -%}
+        <a class="chip role" href="{{ url_for('main.nodes', tag=it.node.role) }}">{{ it.node.role }}</a>
+        {%- else %}<span class="muted">—</span>{% endif -%}
+      </td>
+      <td class="cell-progress">{{ progress(it.summary) }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% elif counts.nodes %}
+<div class="empty">No nodes match these filters. <a href="{{ url_for('main.nodes') }}">Clear filters</a></div>
+{% else %}
+<div class="empty">
+  <p><strong>No nodes yet.</strong></p>
+  <p>Add your first device, then tag it and set up checks under <a href="{{ url_for('main.config') }}">Configuration</a>.</p>
+  <p><a class="btn primary" href="{{ url_for('main.node_new') }}">+ Add node</a></p>
+</div>
+{% endif %}
+{% endblock %}

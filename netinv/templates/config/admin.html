@@ -1,0 +1,34 @@
+{% extends "config/base.html" %}
+{% block title %}Admin info · Configuration{% endblock %}
+{% block config %}
+<div class="data-grid">
+  <section class="card">
+    <h2>Admin info</h2>
+    <p class="muted small">Up to two lines, shown at the top of every page. Leave empty to hide it.</p>
+    <form method="post" class="form">
+      <label class="field {{ 'has-error' if error }}">
+        <span>Text <em>inline Markdown</em></span>
+        <textarea name="admin_info" rows="2" data-admin-input data-preview-url="{{ url_for('main.config_admin_preview') }}" class="mono" maxlength="420" spellcheck="false"
+          placeholder="**Jane Admin** · jane@example.net&#10;[Ops runbook](https://wiki.example.net/ops)">{{ text }}</textarea>
+        <small class="error" data-admin-error {{ 'hidden' if not error }}>{{ error or '' }}</small>
+      </label>
+      <div class="actions"><button class="btn primary">Save</button></div>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Preview <span class="muted small" data-admin-unsaved hidden>· unsaved</span></h2>
+    <div data-admin-preview>{% include "config/_admin_preview.html" %}</div>
+    <h3 class="spaced">Formatting</h3>
+    <table class="md-help">
+      <tr><td><code>**bold**</code></td><td><strong>bold</strong></td></tr>
+      <tr><td><code>*italic*</code></td><td><em>italic</em></td></tr>
+      <tr><td><code>`code`</code></td><td><code>code</code></td></tr>
+      <tr><td><code>[text](https://…)</code></td><td><a href="#" onclick="return false">text</a></td></tr>
+      <tr><td><code>name@example.net</code></td><td>e-mail links automatically</td></tr>
+      <tr><td><code>https://…</code></td><td>web links automatically</td></tr>
+    </table>
+    <p class="muted small">Only http, https and e-mail links are allowed. Web links open in a new tab.</p>
+  </section>
+</div>
+{% endblock %}

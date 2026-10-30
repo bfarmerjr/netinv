@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Configuration</h1><p class="sub">Define checks, group them under tags, and apply tags to nodes.</p></div>
+</div>
+<nav class="tabs">
+  <a href="{{ url_for('main.config_checks') }}" class="{{ 'active' if request.endpoint == 'main.config_checks' }}">Checks</a>
+  <a href="{{ url_for('main.config_tags') }}" class="{{ 'active' if request.endpoint == 'main.config_tags' }}">Tags</a>
+  <a href="{{ url_for('main.config_matrix', kind='tag-checks') }}" class="{{ 'active' if kind == 'tag-checks' }}">Tags → Checks</a>
+  <a href="{{ url_for('main.config_matrix', kind='node-tags') }}" class="{{ 'active' if kind == 'node-tags' }}">Nodes → Tags</a>
+  <a href="{{ url_for('main.config_admin') }}" class="{{ 'active' if request.endpoint == 'main.config_admin' }}">Admin info</a>
+  <a href="{{ url_for('main.config_data') }}" class="{{ 'active' if request.endpoint == 'main.config_data' }}">Import / Export</a>
+  <a href="{{ url_for('main.config_clear') }}" class="danger-tab {{ 'active' if request.endpoint == 'main.config_clear' }}">Clear data</a>
+</nav>
+{% block config %}{% endblock %}
+{% endblock %}

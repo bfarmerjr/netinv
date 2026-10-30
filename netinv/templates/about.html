@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block content %}
+<div class="page-head about-head">
+  <div class="about-title">
+    <img src="{{ url_for('static', filename='favicon.svg', v=version) }}" width="56" height="56" alt="">
+    <div>
+      <h1>NetInv <span class="ver-badge">v{{ version }}</span></h1>
+      <p class="sub">Track network nodes and manually confirm the compliance checks their tags require.</p>
+    </div>
+  </div>
+</div>
+
+<div class="flash notice" role="note"><strong>Internal use only.</strong> NetInv has no authentication or access control.
+  Anyone who can reach it can view and change everything, so access must be restricted by the reverse proxy in front of it.</div>
+
+<div class="about-grid">
+  <section class="card">
+    <h2>Running environment</h2>
+    <dl class="kv wide">
+      <dt>Version</dt><dd>{{ version }} (<a href="{{ url_for('main.about_source') }}">download source</a>)</dd>
+      {% for k, v in environment %}<dt>{{ k }}</dt><dd>{{ v }}</dd>{% endfor %}
+      <dt>Worker</dt><dd>{{ worker_summary() }}</dd>
+    </dl>
+  </section>
+
+  <section class="card">
+    <h2>License</h2>
+    <p>Copyright © 2026 Bill Farmer, Jr.</p>
+    <p>NetInv is free software: you can redistribute it and/or modify it under the terms of the
+      <strong>GNU Affero General Public License v3.0 or later</strong> (AGPL-3.0-or-later).
+      It comes with no warranty.</p>
+    <p>Because NetInv is served over a network, the AGPL gives everyone using it the right to its source code.
+      The code for exactly this running version can be downloaded here.</p>
+    <div class="actions">
+      <a class="btn" href="{{ url_for('main.about_license') }}" target="_blank" rel="noopener">Full license text</a>
+      <a class="btn" href="{{ url_for('main.about_source') }}">Download source (v{{ version }})</a>
+    </div>
+    <p class="muted small">Also at <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">gnu.org/licenses/agpl-3.0</a>.</p>
+
+    <h2 class="spaced">Built with Claude Code</h2>
+    <p>NetInv was developed with the help of <a href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer">Claude Code</a>,
+      Anthropic's agentic coding tool.</p>
+  </section>
+</div>
+
+<h2 class="section-title">Dependencies</h2>
+<div class="card flush">
+<table class="table deps-table">
+  <thead><tr><th>Package</th><th>Minimum</th><th>Installed</th><th>Required by</th><th>License</th></tr></thead>
+  <tbody>
+  {% for d in deps %}
+    <tr>
+      <td class="cell-name">{{ d.name }}</td>
+      <td class="mono" data-label="Minimum">{{ d.minimum or 'any' }}</td>
+      <td class="mono" data-label="Installed">{{ d.installed }}</td>
+      <td data-label="Required by">{{ d.required_by|join(', ') }}</td>
+      <td class="muted" data-label="License">{{ d.license }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+<p class="muted small">Minimum is the highest lower bound required by NetInv (from <code>requirements.txt</code>) or by another package. <code>requirements.lock</code> pins the tested versions.</p>
+{% endblock %}

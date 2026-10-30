@@ -1,0 +1,55 @@
+{% extends "config/base.html" %}
+{% block title %}Import / Export · Configuration{% endblock %}
+{% block config %}
+<p class="muted small">Currently stored: {{ stats.nodes }} nodes · {{ stats.checks }} checks · {{ stats.tags }} tags · {{ stats.history }} history entries.</p>
+
+<div class="data-grid">
+  <section class="card">
+    <h2>Export</h2>
+    <p class="muted small">Downloads a JSON file with all nodes, checks, tags, their links, and each node's check states.</p>
+    <form method="get" action="{{ url_for('main.config_export') }}" class="form">
+      <label class="check-label"><input type="checkbox" name="history" value="1" checked> Include change history</label>
+      <div class="actions"><button class="btn primary">Download export</button></div>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Import</h2>
+    <p class="muted small">Load a file made by Export. If anything in it is invalid, nothing is changed.</p>
+    <form method="post" action="{{ url_for('main.config_import') }}" enctype="multipart/form-data" class="form" data-import>
+      <label class="field"><span>Export file</span><input type="file" name="file" accept=".json,application/json" required></label>
+      <fieldset class="field"><legend>Mode</legend>
+        <div class="radio-list">
+          <label><input type="radio" name="mode" value="merge" checked>
+            <span><strong>Merge</strong><br><span class="muted small">Items in the file are added, or overwrite existing items with the same name. Everything else is kept.</span></span></label>
+          <label><input type="radio" name="mode" value="replace">
+            <span><strong>Replace everything</strong><br><span class="muted small">Clears all current data and history first, then loads the file.</span></span></label>
+        </div>
+      </fieldset>
+      <div class="actions"><button class="btn primary">Import</button></div>
+    </form>
+  </section>
+</div>
+
+<section class="card hosts-card">
+  <div class="card-head">
+    <div>
+      <h2>Hosts file</h2>
+      <p class="muted small">{{ host_count }} node{{ '' if host_count == 1 else 's' }} in <code>/etc/hosts</code> format: IP, then FQDN, then friendly name on one line, so reverse lookups return the FQDN.
+        Friendly names have spaces turned into hyphens. The file only holds NetInv nodes, so append it to <code>/etc/hosts</code> rather than replacing that file.</p>
+    </div>
+    <div class="actions">
+      <a class="btn" href="{{ url_for('main.config_hosts') }}" target="_blank" rel="noopener">View</a>
+      <a class="btn primary" href="{{ url_for('main.config_hosts', download=1) }}">Download hosts file</a>
+    </div>
+  </div>
+  <label class="field"><span>Download with curl</span>
+    <div class="copy-line">
+      <input class="mono" readonly value="curl -fsSL '{{ url_for('main.config_hosts', _external=True) }}' -o netinv-hosts" data-copy-src>
+      <button type="button" class="btn" data-copy>Copy</button>
+    </div>
+  </label>
+  <pre class="hosts-preview">{{ hosts }}</pre>
+</section>
+
+{% endblock %}

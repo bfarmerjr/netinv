@@ -1,0 +1,19 @@
+# NetInv settings, read by run.sh. Copy to netinv.conf and edit.
+# Variables already set in the environment take precedence over values here.
+
+# Listen address. Keep 127.0.0.1 when the reverse proxy runs on the same
+# host; otherwise use an address only the proxy can reach, and firewall the
+# port so nothing else can (NetInv has no authentication of its own).
+NETINV_HOST=127.0.0.1
+NETINV_PORT=8000
+
+# Or give gunicorn's bind string directly (overrides HOST/PORT), e.g. a socket:
+#NETINV_BIND=unix:/run/netinv/netinv.sock
+
+# Number of reverse proxies in front whose X-Forwarded-* headers are trusted.
+# Set to 0 if clients connect directly (they could otherwise spoof their IP).
+#NETINV_PROXY_HOPS=1
+
+#NETINV_WORKERS=2
+#NETINV_THREADS=8
+#NETINV_DATA_DIR=./instance
